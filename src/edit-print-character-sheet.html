@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Edit Print Character Sheet 5x8</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <input type="hidden" id="fixed_source_version" value="1.0.1" />
+    <input type="file" id="importFileElement" style="display:none" />
+    <div class="controls-div display-block">
+        <button id="exportButton">Export</button>
+        <button id="importButton">Import</button>
+    </div>
+    <div class="page-1">
+        <div class="background">
+            <img class="backgroundimage" src="edit-print-character-sheet-background.png" class="img-responsive">
+
+            <div class="text-overlay">
+                <div id="page1_notes1_container_border">
+                    <textarea id="data_page1_notes1" class="has-data" rows="20" cols="29" wrap="off">20 lines 29 chars each</textarea>
+                </div>
+                <div id="page1_notes2_container_border">
+                    <textarea id="data_page1_notes2" class="has-data" rows="25" cols="29" wrap="off">25 lines 29 chars each</textarea>
+                </div>
+                <div id="weapons-container-border">
+                    <textarea id="data_weapons" class="has-data" rows="7" cols="29" wrap="off">7 items 29 chars each</textarea>
+                </div>
+                <div id="equipment-container-border">
+                    <textarea id="data_equipment" class="has-data" rows="18" cols="29" wrap="off">18 items 29 chars each</textarea>
+                </div>
+
+                <!-- Player and Character Information -->
+                <input class="has-data row-1 pos-name"   id="data_character_name" value="Character Name" />
+                <input class="has-data row-1 pos-player" id="data_player_name"    value="Player Name" />
+                <input class="has-data row-1 pos-date"   id="data_date"           value="01/01/2025" />
+                <input class="has-data row-2 pos-race"   id="data_race"           value="Short" />
+                <input class="has-data row-2 pos-class"  id="data_class"          value="Smasher" />
+                <input class="has-data row-2 pos-level"  id="data_level"          value="0" />
+                <input class="has-data row-2 pos-xp"     id="data_xp"             value="0 exp" />
+
+                <!-- Attributes -->
+                <input class="has-data col-1-value pos-str"   
+                                                id="data_str" value="18" />
+                <div contenteditable class="has-data col-1-mod pos-str-mod" 
+                                                id="data_str_mod">some dwarven strenght +3</div>
+                <input class="has-data col-1-value pos-int"
+                                                id="data_int" value="10" />
+                <div contenteditable class="has-data col-1-mod pos-int-mod"
+                                                id="data_int_mod">+0</div>
+                <input class="has-data col-1-value pos-wis"
+                                                id="data_wis" value="12" />
+                <div contenteditable class="has-data col-1-mod pos-wis-mod"
+                                                id="data_wis_mod">+1</div>
+                <input class="has-data col-1-value pos-dex"
+                                                id="data_dex" value="9" />
+                <div contenteditable class="has-data col-1-mod pos-dex-mod"
+                                                id="data_dex_mod">+0</div>
+                <input class="has-data col-1-value pos-con"
+                                                id="data_con" value="14" />
+                <div contenteditable class="has-data col-1-mod pos-con-mod"
+                                                id="data_con_mod">+2</div>
+                <input class="has-data col-1-value pos-cha"
+                                                id="data_cha" value="8" />
+                <div contenteditable class="has-data col-1-mod pos-cha-mod"
+                                                id="data_cha_mod">-1</div>
+
+                <!-- Saving Throws -->
+                <input class="has-data col-1-value pos-death"
+                                                id="data_death" value="10" />
+                <div contenteditable class="has-data col-1-mod pos-death-mod"
+                                                id="data_death_mod">+4 Dwarven vs Death</div>
+                <input class="has-data col-1-value pos-wands"
+                                                id="data_wands" value="11" />
+                <div contenteditable class="has-data col-1-mod pos-wands-mod"
+                                                id="data_wands_mod">+2 Dwarven vs Wands</div>
+                <input class="has-data col-1-value pos-petrify"
+                                                id="data_petrify" value="12" />
+                <div contenteditable class="has-data col-1-mod pos-petrify-mod"
+                                                id="data_petrify_mod">+4 Dwarven vs Stone</div>
+                <input class="has-data col-1-value pos-breath"
+                                                id="data_breath" value="13" />
+                <div contenteditable class="has-data col-1-mod pos-breath-mod"
+                                                id="data_breath_mod">-4 Dwarven vs Halitosis</div>
+                <input class="has-data col-1-value pos-spells"
+                                                id="data_spells" value="14" />
+                <div contenteditable class="has-data col-1-mod pos-spells-mod"
+                                                id="data_spells_mod">+2 Dwarven vs Twinkle Toes</div>
+
+                <input class="has-data pos-campaign"     id="data_campaign" value="A Campaign" />
+                <input class="has-data pos-setting"      id="data_setting" value="Mordor" />
+
+                <input class="has-data pos-ac"           id="data_ac" value="15" />
+                <input class="has-data pos-move"         id="data_move" value="35" />
+                <input class="has-data pos-hp"           id="data_hp" value="9" />
+                <input class="has-data pos-attack-bonus" id="data_attack_bonus" value="0" />
+
+                <input class="has-data pos-money"        id="data_money" value="2 GP" />
+            </div>
+        </div>
+    </div>
+
+    <div class="page-2">
+        <div class="page-2-content">
+            <div class="page-2-section page-2-section-1">
+                <div class="page-2-section-header">Backstory</div>
+                <div class="page_2_section_container">
+                    <textarea id="data_backstory" class="has-data page2_notes_textarea" rows="34" cols="27" wrap="off">34 lines 27 characters each
+                    </textarea>
+                </div>
+            </div>
+            <div class="page-2-section page-2-section-2">
+                <div class="page-2-section-header">Notes</div>
+                <div class="page_2_section_container">
+                    <textarea id="data_notes" class="has-data page2_notes_textarea" rows="34" cols="27" wrap="off">34 lines 27 characters each</textarea>
+                </div>
+            </div>
+            <div class="page-2-section page-2-section-3">
+                <div class="page-2-section-header">More Notes</div>
+                <div class="page_2_section_container">
+                    <textarea id="data_morenotes" class="has-data page2_notes_textarea" rows="34" cols="27" wrap="off">34 lines 27 characters each</textarea>
+                </div>
+            </div>
+            <div class="page-2-section page-2-section-4">
+                <div class="page-2-section-header">Even More Notes</div>
+                <div class="page_2_section_container">
+                    <textarea id="data_evenmorenotes" class="has-data page2_notes_textarea" rows="34" cols="27" wrap="off">34 lines 27 characters each</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js" async defer></script>
+</body>
+
+</html>
