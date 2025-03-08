@@ -34,6 +34,11 @@ Changes:
   Refactor repetitive code in tooltip updating
     - updateTextContentFromHidden
   Improved consistency and clarity of element IDs and CSS classes
+    `,
+    v1_1_1: `v1.1.0
+    Fixed bug where hidden tooltip was blocking edit access to a few inputs.
+    Adding images to /assets
+    Added README.md with basics and images
     `
     }
 )
@@ -101,7 +106,8 @@ const tooltipElementIds = Object.freeze({
     dataImportedFrom: "tooltip_imported_from",
     dataImportedAt: "tooltip_imported_at",
     dataSavedAs: "tooltip_saved_as",
-    dataSavedAt: "tooltip_saved_at"
+    dataSavedAt: "tooltip_saved_at",
+    dataVersion: "tooltip_version"
 })
 
 const controlElementIds = Object.freeze({
@@ -312,6 +318,13 @@ function updateFileTooltip() {
         toContentId: tooltipElementIds.dataImportedAt,
         defaultHiddenValue: '',
         contentValuePrefix: 'at '
+    })
+
+    updateTextContentFromHidden({
+        fromHiddenId: hiddenElementIds.sourceVersion,
+        toContentId: tooltipElementIds.dataVersion,
+        defaultHiddenValue: '',
+        contentValuePrefix: 'v'
     })
 }
 
