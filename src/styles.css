@@ -454,7 +454,6 @@ div[contenteditable] {
     color: black;
     z-index: 100;
     top: 12px;
-    left: 120px;
     padding: 0;
     margin: 0;
     text-align: left;
@@ -479,6 +478,16 @@ div[contenteditable] {
     text-align: center;
     width: 90%;
     font-style: normal;
+}
+.tt_version {
+    float: right;
+    display: block;
+    top: 4px;
+    margin-right: 12px;
+    text-align: right;
+    font-style:normal;
+    font-size: x-small;
+    color: gray;
 }
 .tt_label {
     position: absolute;
@@ -527,34 +536,9 @@ div[contenteditable] {
 }
 .hiddenTooltip {
     opacity: 0;
+    left: -500px;
 }
 .displayedTooltip {
     opacity: 100%;
+    left: 120px;
 }
-
-
-
-/* .tooltip::after {
-    content: attr(data-tooltip);
-    visibility: hidden;
-    width: 150px;
-    background-color: black;
-    color: white;
-    text-align: center;
-    font-size: medium;
-    font-weight: 500;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-} */
-
-/* .tooltip:hover::after {
-    visibility: visible;
-    opacity: 0.75;
-} */

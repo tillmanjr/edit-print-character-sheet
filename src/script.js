@@ -101,7 +101,8 @@ const tooltipElementIds = Object.freeze({
     dataImportedFrom: "tooltip_imported_from",
     dataImportedAt: "tooltip_imported_at",
     dataSavedAs: "tooltip_saved_as",
-    dataSavedAt: "tooltip_saved_at"
+    dataSavedAt: "tooltip_saved_at",
+    dataVersion: "tooltip_version"
 })
 
 const controlElementIds = Object.freeze({
@@ -312,6 +313,13 @@ function updateFileTooltip() {
         toContentId: tooltipElementIds.dataImportedAt,
         defaultHiddenValue: '',
         contentValuePrefix: 'at '
+    })
+
+    updateTextContentFromHidden({
+        fromHiddenId: hiddenElementIds.sourceVersion,
+        toContentId: tooltipElementIds.dataVersion,
+        defaultHiddenValue: '',
+        contentValuePrefix: 'v'
     })
 }
 
