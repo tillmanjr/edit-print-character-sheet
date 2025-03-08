@@ -6,15 +6,34 @@ const releaseNotes = new Object(
 Changes:
   Add release notes (releaseNotes) to script.
   Swapped order of Import Export buttons
+    - (Import) (Save)
   Changed Export button label to Save
   Add Imported From filename and Imported At tracking.
     Stored in exported JSON.
-  Add Saved As filename and Saved At tracking
+  Add Saved As filename and Saved At (when) tracking
   Added info tooltip displaying:
-    Imported from filename and when
-    Saved as filename and when
+    - Imported from filename and when
+    - Saved as filename and when
+  Tooltip for SavedAt and Imported At include locale date and time
+  Added 🛈 "information circle" onhover tooltip trigger to Control Panel
+    - | (Import)  (Save)  🛈 |
   Added Character level and current date to generated Save Filename 
     format: CharacterName-Campaign-Setting-CharacterLevel-CurrentDate
+  Referenced elements' IDs referenced via constants
+    - hiddenElementIds
+    - tooltipElementIds
+    - controlElementIds
+  Referenced CSS classes referenced by constants
+    - cssClasses
+  Decomposed monolithic event linking into discrete functions
+    - connectControlPanelPrintingVisibilty
+    - connectImportButton
+    - connectSaveButton
+    - connectTooltip
+    - connectImportHandler
+  Refactor repetitive code in tooltip updating
+    - updateTextContentFromHidden
+  Improved consistency and clarity of element IDs and CSS classes
     `
     }
 )
@@ -22,7 +41,7 @@ Changes:
 const dataElementClass = "has-data";
 // All elements having data. 
 // Keyed by element id with value as property used to store the data
-const dataLocations = {
+const dataLocations = Object.freeze({
     data_character_name: "value",
     data_player_name: "value",
     data_date: "value",
@@ -67,6 +86,49 @@ const dataLocations = {
     data_notes: "multiline",
     data_morenotes: "multiline",
     data_evenmorenotes: "multiline"
+})
+
+const hiddenElementIds = Object.freeze({
+    sourceVersion: "fixed_source_version",
+    importedFrom: "imported_from_filename",
+    importedAt: "imported_at",
+    savedAs: "last_saved_as_filename",
+    savedAt: "last_saved_at"
+})
+
+const tooltipElementIds = Object.freeze({
+    dataDiv: "tooltip_datadiv",
+    dataImportedFrom: "tooltip_imported_from",
+    dataImportedAt: "tooltip_imported_at",
+    dataSavedAs: "tooltip_saved_as",
+    dataSavedAt: "tooltip_saved_at"
+})
+
+const controlElementIds = Object.freeze({
+    controlPanel: "control_panel",
+    buttons: {
+        import: "importButton",
+        save: "exportButton"
+    },
+    tooltipTrigger: "tt_trigger"
+})
+
+const cssClasses = Object.freeze({
+    tooltip: {
+        hidden: "hiddenTooltip",
+        displayed: "displayedTooltip"
+    },
+    controlPanel: {
+        hidden: "display-none",
+        displayed: 'display-block'
+    }
+})
+
+function updateHiddenElementValue ({hiddenElementId, value}) {
+    const hiddenElement = document.getElementById(hiddenElementId)
+    if (hiddenElement) {
+        hiddenElement.value = value
+    }
 }
 
 function readDataElement(id, storedIn) {
@@ -89,7 +151,7 @@ function collectData() {
         }
     });
     const meta = [
-        {data_file_version: document.getElementById("fixed_source_version").value},
+        {data_file_version: document.getElementById(hiddenElementIds.sourceVersion).value},
         {data_file_creation: new Date().toISOString()}
     ]
     return meta.concat(data);
@@ -121,7 +183,7 @@ function exportJSONToFile(jsonObject, filename) {
     const downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute("href", dataStr);
     downloadAnchorNode.setAttribute("download", filename);
-    document.body.appendChild(downloadAnchorNode); // required for firefox
+    document.body.appendChild(downloadAnchorNode);
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
 }
@@ -133,7 +195,6 @@ function importData(data) {
         fileInput.click();
     }
 }
-
 
 /**
  * From a UTC Date object return a new Date explicitly converted to locale date and time
@@ -150,7 +211,6 @@ function convertUTCDateToLocalDate(date) {
 
     return newDate;   
 }
-
 
 /**
  * Converts a number to a string with 0 prefixed to a minimum length of 2
@@ -194,97 +254,144 @@ function exportData() {
         console.log('Exporting data to ', saveFileName)
         exportJSONToFile(data, saveFileName);
 
-        const lastSavedAsFilename = document.getElementById('last_saved_as_filename')
+        const lastSavedAsFilename = document.getElementById(hiddenElementIds.savedAs)
         if (lastSavedAsFilename) {
             lastSavedAsFilename.value = saveFileName
         }
 
-        const lastSavedAt = document.getElementById('last_saved_at')
+        const lastSavedAt = document.getElementById(hiddenElementIds.savedAt)
         if (lastSavedAt) {
-            const lastSavedAtStr = new Date().toLocaleDateString()
+            const lastSavedAtStr = new Date().toLocaleString()
             lastSavedAt.value = lastSavedAtStr
         }
     }
 }
 
+function updateTextContentFromHidden({
+    fromHiddenId,
+    toContentId,
+    defaultHiddenValue,
+    contentValuePrefix
+}) {
+    const hiddenElement = document.getElementById(fromHiddenId)
+    const hiddenValue = hiddenElement ? hiddenElement.value : defaultHiddenValue
+    const contentElement = document.getElementById(toContentId)
+    if (contentElement) {
+        contentElement.textContent = hiddenValue !== defaultHiddenValue ? `${contentValuePrefix}${hiddenValue}` : hiddenValue
+    }
+}
+
 function updateFileTooltip() {
-    const lastSavedAsFilenameElement = document.getElementById('last_saved_as_filename')
-    const lastSavedAsFilenameValue = lastSavedAsFilenameElement ? lastSavedAsFilenameElement.value : 'not saved'
-    const lastSavedAsTooltip = document.getElementById('tooltip_saved_as')
-    if (lastSavedAsTooltip) {
-        lastSavedAsTooltip.textContent = lastSavedAsFilenameValue
-    }
+    // tooltip_saved_as
+    updateTextContentFromHidden({
+        fromHiddenId: hiddenElementIds.savedAs,
+        toContentId: tooltipElementIds.dataSavedAs,
+        defaultHiddenValue: 'not saved',
+        contentValuePrefix: ''
+    })
 
-     // tooltip_saved_at
-    const lastSavedAt = document.getElementById('last_saved_at')
-    const lastSavedAtValue = lastSavedAt ? lastSavedAt.value : 'na'
-    const lastSavedAtTooltip = document.getElementById('tooltip_saved_at')
-    if (lastSavedAtTooltip) {
-        lastSavedAtTooltip.textContent = lastSavedAtValue ? `at ${lastSavedAtValue}` : ''
-    }
+    // tooltip_saved_at
+    updateTextContentFromHidden({
+        fromHiddenId: hiddenElementIds.savedAt,
+        toContentId: tooltipElementIds.dataSavedAt,
+        defaultHiddenValue: '',
+        contentValuePrefix: 'at '
+    })
 
-     // tooltip_imported_from
-    const importedFromFileElement = document.getElementById('imported_from_filename')
-    const importedFromFileValue = importedFromFileElement ? importedFromFileElement.value : 'new file'
-    const importedFromTooltip = document.getElementById('tooltip_imported_from')
-    if (importedFromTooltip) {
-        importedFromTooltip.textContent = importedFromFileValue
-    }
+    // tooltip_imported_from
+    updateTextContentFromHidden({
+        fromHiddenId: hiddenElementIds.importedFrom,
+        toContentId: tooltipElementIds.dataImportedFrom,
+        defaultHiddenValue: 'new file',
+        contentValuePrefix: ''
+    })
 
     // tooltip_imported_at
-    const importedAtElement = document.getElementById('imported_at')
-    const importedAtValue = importedAtElement ? importedAtElement.value : 'na'
-    const importedAtTooltip = document.getElementById('tooltip_imported_at')
-    if (importedAtTooltip) {
-        importedAtTooltip.textContent = importedAtValue ? `at ${importedAtValue}` : ''
-    }
+    updateTextContentFromHidden({
+        fromHiddenId: hiddenElementIds.importedAt,
+        toContentId: tooltipElementIds.dataImportedAt,
+        defaultHiddenValue: '',
+        contentValuePrefix: 'at '
+    })
+}
 
-    // return `File Info : Last saved as ${lastSavedAsFilenameValue}`
+function importFileHandler(event) {
+    const file = event.target.files[0];
+    const importedFilename = file.name
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const contents = e.target.result;
+        const data = JSON.parse(contents);
+        console.table(data);
+        data.forEach(d => {
+            updateDataElement(d.id, d.value);
+        });
+    }
+    reader.readAsText(file);
+
+    updateHiddenElementValue({
+        hiddenElementId: hiddenElementIds.importedFrom,
+        value: importedFilename
+    })
+
+    updateHiddenElementValue({
+        hiddenElementId: hiddenElementIds.importedAt,
+        value: new Date().toLocaleString()
+    })
+
+    updateHiddenElementValue({
+        hiddenElementId: hiddenElementIds.savedAs,
+        value: 'not saved'
+    })
 }
 
 function showFileTooltip() {
     updateFileTooltip()
-    const tooltipDatadiv = document.getElementById('tooltip_datadiv')
+    const tooltipDatadiv = document.getElementById(tooltipElementIds.dataDiv)
     if (tooltipDatadiv) {
-        tooltipDatadiv.classList.remove('hiddenTooltip')
-        tooltipDatadiv.classList.remove('displayedTooltip')
-        tooltipDatadiv.classList.add('displayedTooltip')
+        tooltipDatadiv.classList.remove(cssClasses.tooltip.hidden)
+        tooltipDatadiv.classList.remove(cssClasses.tooltip.displayed)
+        tooltipDatadiv.classList.add(cssClasses.tooltip.displayed)
     }
 }
 
 function hideFileTooltip() {
-    const tooltipDatadiv = document.getElementById('tooltip_datadiv')
+    const tooltipDatadiv = document.getElementById(tooltipElementIds.dataDiv)
     if (tooltipDatadiv) {
-        tooltipDatadiv.classList.remove('hiddenTooltip')
-        tooltipDatadiv.classList.remove('displayedTooltip')
-        tooltipDatadiv.classList.add('hiddenTooltip')
+        tooltipDatadiv.classList.remove(cssClasses.tooltip.hidden)
+        tooltipDatadiv.classList.remove(cssClasses.tooltip.displayed)
+        tooltipDatadiv.classList.add(cssClasses.tooltip.hidden)
     }
 }
 
+function showControlPanel() {
+    const controlsDiv = document.getElementById(controlElementIds.controlPanel);
+    controlsDiv.classList.remove(cssClasses.controlPanel.hidden);
+    controlsDiv.classList.add(cssClasses.controlPanel.displayed);    
+}
 
+function hideControlPanel(event) {
+    const controlsDiv = document.getElementById(controlElementIds.controlPanel);
+    controlsDiv.classList.remove(cssClasses.controlPanel.displayed);
+    controlsDiv.classList.add(cssClasses.controlPanel.hidden);
+}
 
-window.onload = function () {
-    window.onbeforeprint = function () {
-        console.log('Printing');
-        const controlsDiv = document.querySelector('.controls-div');
-        controlsDiv.classList.remove('display-block');
-        controlsDiv.classList.add('display-none');
-    }
-    window.onafterprint = function () {
-        console.log('After printing');
-        const controlsDiv = document.querySelector('.controls-div');
-        controlsDiv.classList.remove('display-none');
-        controlsDiv.classList.add('display-block');
-    }
-    const importButton = document.getElementById("importButton");
+function connectImportButton() {
+    const importButton = document.getElementById(controlElementIds.buttons.import);
     if (importButton) {
         importButton.addEventListener("click", importData);
     }
-    const exportButton = document.getElementById("exportButton");
+}
+
+function connectSaveButton() {
+    const exportButton = document.getElementById(controlElementIds.buttons.save);
     if (exportButton) {
         exportButton.addEventListener("click", exportData);
     }
-    const fileInfoTooltip = document.getElementById('file_tooltip_content')
+}
+
+function connectTooltip() {
+    const fileInfoTooltip = document.getElementById(controlElementIds.tooltipTrigger)
     if (fileInfoTooltip) {
         fileInfoTooltip.addEventListener("mouseenter", () => {
             showFileTooltip()
@@ -293,38 +400,24 @@ window.onload = function () {
             hideFileTooltip()
         });
     }
+}
 
+function connectImportFileHandler() {
     const fileInput = document.getElementById("importFileElement")
     if (fileInput) {
-        fileInput.addEventListener("change", (event) => {
-            const file = event.target.files[0];
-            const importedFilename = file.name
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const contents = e.target.result;
-                const data = JSON.parse(contents);
-                console.table(data);
-                data.forEach(d => {
-                    updateDataElement(d.id, d.value);
-                });
-            }
-            reader.readAsText(file);
-
-            const importedFromFileElement = document.getElementById('imported_from_filename')
-            if (importedFromFileElement) {
-                importedFromFileElement.value = importedFilename
-            }
-
-            const lastSavedAsFilename = document.getElementById('last_saved_as_filename')
-            if (lastSavedAsFilename) {
-                lastSavedAsFilename.value = 'not saved'
-            }
-
-            const importedAtElement = document.getElementById('imported_at')
-            if (importedAtElement) {
-                importedAtElement.value = new Date().toLocaleDateString();
-            }
-            
-        });
+        fileInput.addEventListener("change", importFileHandler);
     }
+}
+
+function connectControlPanelPrintingVisibilty() {
+    window.addEventListener('beforeprint', hideControlPanel)
+    window.addEventListener('afterprint', showControlPanel)
+}
+
+window.onload = function () {
+    connectControlPanelPrintingVisibilty()
+    connectImportButton()
+    connectSaveButton()
+    connectTooltip()
+    connectImportFileHandler()
 }

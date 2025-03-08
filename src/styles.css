@@ -433,7 +433,7 @@ div[contenteditable] {
     border: 1px solid black;
 }
 
-.tooltip {
+.tooltip_trigger {
     position: relative;
     display: inline-block;
     color: #870F0F;
@@ -460,7 +460,7 @@ div[contenteditable] {
     text-align: left;
     font-size: smaller;
     font-style: normal;
-    width: 360px;
+    width: 380px;
     height: 140px;
     background-color: #D7AFAF;
     border: 1px solid #870F0F;
