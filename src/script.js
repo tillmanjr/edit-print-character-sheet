@@ -34,6 +34,11 @@ Changes:
   Refactor repetitive code in tooltip updating
     - updateTextContentFromHidden
   Improved consistency and clarity of element IDs and CSS classes
+    `,
+    v1_1_1: `v1.1.0
+    Fixed bug where hidden tooltip was blocking edit access to a few inputs.
+    Adding images to /assets
+    Added README.md with basics and images
     `
     }
 )
