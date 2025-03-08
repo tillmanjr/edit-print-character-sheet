@@ -7,15 +7,39 @@
     <title>Edit Print Character Sheet 5x8</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <input type="hidden" id="fixed_source_version" value="1.0.1" />
-    <input type="file" id="importFileElement" style="display:none" />
-    <div class="controls-div display-block">
-        <button id="exportButton">Export</button>
+    <input type="hidden" id="fixed_source_version" value="1.1.0" />
+    <input type="hidden" id="imported_from_filename" value="new character, not loaded from existing character" />
+    <input type="hidden" id="imported_at" value="" />
+    <input type="hidden" id="last_saved_as_filename" value="not yet saved" />
+    <input type="hidden" id="last_saved_at" value="" />
+    <input
+        type="file"
+        id="importFileElement"
+        accept=".json"
+        style="display:none" />
+    <div class="controls-div display-block" id="control_panel">
         <button id="importButton">Import</button>
+        <button id="exportButton">Save</button>
+        <div class="container">
+            <p class="tooltip_trigger"
+                id="tt_trigger">
+                &#x1F6C8;
+            </p>
+            <div id="tooltip_datadiv" class="tooltip_datadiv hiddenTooltip">
+                <span class="tt_heading">Character Info</span>
+                <span class="tt_label tt_imported_label">Imported from: </span>
+                <span id="tooltip_imported_from" class="tt_imported_from"></span>
+                <span id="tooltip_imported_at" class="tt_imported_at"></span>
+                <span class="tt_label tt_saved_label">Saved as <em>(ignores user-specified filenames)</em>: </span>
+                <span id="tooltip_saved_as" class="tt_saved_as"></span>
+                <span id="tooltip_saved_at" class="tt_saved_at"></span>
+            </div>
+        </div>
     </div>
     <div class="page-1">
         <div class="background">

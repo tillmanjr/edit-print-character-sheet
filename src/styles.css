@@ -15,8 +15,8 @@
     background-color: #D7AFAF;
     border: 1px solid #870F0F;
     border-radius: 5px;
-    height: 22px;
-    width: 120px;
+    height: 24px;
+    width: 130px;
     z-index: 1000;
 }
 
@@ -175,7 +175,6 @@ div[contenteditable] {
     text-align: right;
     margin-right: 4px;
 }
-
 .col-1-mod {
     position: absolute;
     left: 100px;
@@ -191,126 +190,99 @@ div[contenteditable] {
 .pos-str {
     top: 76px;
 }
-
 .pos-str-mod {
     top: 74px;
 }
-
 .pos-int {
     top: 99px;
 }
-
 .pos-int-mod {
     top: 97px;
 }
-
 .pos-wis {
     top: 123px;
 }
-
 .pos-wis-mod {
     top: 121px;
 }
-
 .pos-dex {
     top: 144px;
 }
-
 .pos-dex-mod {
     top: 145px;
 }
-
 .pos-con {
     top: 169px;
 }
-
 .pos-con-mod {
     top: 169px;
 }
-
 .pos-cha {
     top: 195px;
 }
-
 .pos-cha-mod {
     top: 193px;
 }
-
 .pos-death {
     top: 243px;
 }
-
 .pos-death-mod {
     top: 241px;
 }
-
 .pos-wands {
     top: 267px;
 }
-
 .pos-wands-mod {
     top: 265px;
 }
-
 .pos-petrify {
     top: 291px;
 }
-
 .pos-petrify-mod {
     top: 289px;
 }
-
 .pos-breath {
     top: 315px;
 }
-
 .pos-breath-mod {
     top: 313px;
 }
-
 .pos-spells {
     top: 339px;
 }
-
 .pos-spells-mod {
     top: 337px;
 }
-
 .pos-campaign {
     position: absolute;
     top: 365px;
     left: 30px;
     width: 156px;
 }
-
 .pos-setting {
     position: absolute;
     top: 400px;
     left: 30px;
     width: 156px;
 }
-
 .pos-ac {
     position: absolute;
     top: 74px;
     left: 247px;
     width: 120px;
 }
-
 .pos-move {
     position: absolute;
     top: 98px;
     left: 265px;
     width: 100px;
 }
-
 .pos-hp {
     position: absolute;
     top: 122px;
     left: 247px;
     width: 120px;
 }
-
 .pos-attack-bonus {
     position: absolute;
     top: 172px;
@@ -318,7 +290,6 @@ div[contenteditable] {
     width: 38px;
     text-align: center;
 }
-
 .pos-money {
     position: absolute;
     top: 78px;
@@ -461,3 +432,129 @@ div[contenteditable] {
 #data_page1_notes2:focus {
     border: 1px solid black;
 }
+
+.tooltip_trigger {
+    position: relative;
+    display: inline-block;
+    color: #870F0F;
+    margin: 0;
+    padding: 0;
+    right: -4px;
+    font-size: medium;
+    cursor:pointer;
+}
+.container {
+    text-align: center;
+    display: inline-block;
+    top: 4px;
+    right: 4px;
+}
+.tooltip_datadiv {
+    position: absolute;
+    color: black;
+    z-index: 100;
+    top: 12px;
+    left: 120px;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    font-size: smaller;
+    font-style: normal;
+    width: 380px;
+    height: 140px;
+    background-color: #D7AFAF;
+    border: 1px solid #870F0F;
+    border-style: solid;
+    border-width: 2;
+    border-radius: 12px;
+    transition-timing-function: ease-in-out;
+    transition-property: opacity;
+    transition-duration: 1000ms;
+    transition-delay: 250ms;
+}
+.tt_heading {
+    position: absolute;
+    display: block;
+    top: 4px;
+    text-align: center;
+    width: 90%;
+    font-style: normal;
+}
+.tt_label {
+    position: absolute;
+    margin-left: 4px;
+    left: 4px;;
+    display: inline-block;
+    font-style: normal;
+}
+.tt_imported_label {   
+    top: 20px;
+}
+.tt_imported_from {
+    position: absolute;
+    display: block;
+    top: 40px;
+    left: 12px;
+    color: black;
+    font-size: smaller;
+}
+.tt_imported_at {
+    position: absolute;
+    display: inline-block;
+    top: 60px;
+    left: 12px;
+    text-align: left;
+    font-size: smaller;
+}
+.tt_saved_label {
+    top: 80px;
+}
+.tt_saved_as {
+    position: absolute;
+    display: inline-block;
+    top: 100px;
+    left: 12px;
+    text-align: left;
+    font-size: smaller;
+}
+.tt_saved_at {
+    position: absolute;
+    display: inline-block;
+    top: 120px;
+    left: 12px;
+    text-align: left;
+    font-size: smaller;
+}
+.hiddenTooltip {
+    opacity: 0;
+}
+.displayedTooltip {
+    opacity: 100%;
+}
+
+
+
+/* .tooltip::after {
+    content: attr(data-tooltip);
+    visibility: hidden;
+    width: 150px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-size: medium;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+} */
+
+/* .tooltip:hover::after {
+    visibility: visible;
+    opacity: 0.75;
+} */
