@@ -10,12 +10,12 @@ cd to clone directory
 load `edit-print-character-sheet.html`
 
 ## Main Page  
-![Main Page](https://github.com/tillmanjr/edit-print-character-sheet/blob/fix-tooltip-overlay-bug/assets/page01.png?raw=true)  
+![Main Page](https://github.com/tillmanjr/edit-print-character-sheet/blob/main/assets/page01.png?raw=true)  
 ## Second Page
-![Second Page](https://github.com/tillmanjr/edit-print-character-sheet/blob/fix-tooltip-overlay-bug/assets/page02.png?raw=true) 
+![Second Page](https://github.com/tillmanjr/edit-print-character-sheet/blob/main/assets/page02.png?raw=true) 
 ## Edit any detail, singular or list, in-place   
-![Edit in place](https://github.com/tillmanjr/edit-print-character-sheet/blob/fix-tooltip-overlay-bug/assets/editinplace.png?raw=true)  
+![Edit in place](https://github.com/tillmanjr/edit-print-character-sheet/blob/main/assets/editinplace.png?raw=true)  
 ## Character date can be saved and load locally  
-![Import/Save Character Data](https://github.com/tillmanjr/edit-print-character-sheet/blob/fix-tooltip-overlay-bug/assets/fileinfotooltip.png?raw=true)  
+![Import/Save Character Data](https://github.com/tillmanjr/edit-print-character-sheet/blob/main/assets/fileinfotooltip.png?raw=true)  
 ## Formatted for 8" x 5" card printing    
-![Formatted for printing 8" x 5" card](https://github.com/tillmanjr/edit-print-character-sheet/blob/fix-tooltip-overlay-bug/assets/printsas5x8.png?raw=true)
+![Formatted for printing 8" x 5" card](https://github.com/tillmanjr/edit-print-character-sheet/blob/main/assets/printsas5x8.png?raw=true)
