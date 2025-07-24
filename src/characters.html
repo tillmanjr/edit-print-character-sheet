@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Characters</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #app {
+            width: 100%;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            width: 100%;
+            padding: 0;
+        }
+
+        .characters-app {
+            display: grid;
+            grid-auto-columns: 100%;
+            grid-gap: 5px;
+            background-color: bisque;
+        }
+
+        .app-header-component {   
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0;
+            background-color: #D7AFAF;
+            border: 1px solid #870F0F;
+            height: 80px;
+            width: 100%;
+        }
+
+        .character-container {
+            position: absolute;
+            top: 80px;
+            width: 100%;
+            background-color: blue;
+            height: 800px;
+            margin: 0;
+        }
+        .character-sheet-component {
+            position: relative;
+            width: 100%;
+            background-color: green;
+            height: 800px;
+            margin: 0;
+        }
+
+        .page-1 {
+            display: flex;
+            justify-content: left;
+
+            width: 8in;
+            height: 5in;
+            top: 0;
+            left: 0;
+            page-break-after: always;
+        }
+
+        .page-2 {
+            display: block;
+            position: absolute;
+            width: 8in;
+            max-height: 5in;
+            top: 5in;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .page-2-content {
+            display: block;
+            top: 0;
+            left: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .background {
+            background-color: transparent;
+            position: relative;
+            width: 8in;
+            height: 5in;
+            top: 0;
+            left: 0;
+        }
+
+        .backgroundimage {
+            position: absolute;
+            width: 8in;
+            height: 5in;
+        }
+
+        .text-overlay {
+            background-color: transparent;
+            position: absolute;
+            font-size: 1em;
+            padding: 0;
+            left: 0;
+            top: 0;
+            width: 8in;
+            height: 5in;
+        }
+
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+    
+            <script src="juris.js"></script>
+            <script>
+                const StatePersistenceManager = (props, context) => {
+                    const { getState, setState, subscribe } = context;
+                    
+                    const config = {
+                        key_prefix: 'character_app_',
+                        key_characterNames: 'character_names'
+                    }
+
+                    return {
+                         // Lifecycle hooks for headless components
+                        hooks: {
+                            onRegister: () => {
+                                console.log('📦 StatePersistenceManager registered');
+                                // Initialize subscriptions, start services, setup data
+                                // initializeDataSources();
+                            },
+                            
+                            onUnregister: () => {
+                                console.log('🧹 StatePersistenceManager cleanup');
+                                // Cleanup subscriptions, stop services, clear timers
+                                // cleanup();
+                            }
+                        },
+
+                        // Public API for other components to use
+                        api: {
+                            user: () => {
+                                setState('api.loading', true);
+                                try {
+                                    const user = {
+                                        name: 'foozle'
+                                    }
+                                    setState('user', user);
+                                } catch (error) {
+                                    setState('api.error', error.message);
+                                } finally {
+                                    setState('api.loading', false);
+                                }
+                            },
+                            loadCharacterNames: () => {
+                                setState('api.loading', true);
+                                try {
+                                    const characterNames = getCharacterNames()
+                                    setState('characterNames', characterNames);
+                                } catch (error) {
+                                    setState('api.error', error.message);
+                                } finally {
+                                    setState('api.loading', false);
+                                }
+                            },
+                            postCharacterName: (characterName) => {
+                                setState('api.saving', true);
+                                try {
+                                    const playerName = getState('player_name', '')
+                                    const characterNames = addCharacterName(characterName)
+                                    saveCharacterName(playerName, characterName)
+                                    setState('characterNames', characterNames);
+                                } catch (error) {
+                                    setState('api.error', error.message);
+                                    setState('api.saving', false);
+                                } finally {
+                                    setState('api.saving', false);
+                                }
+                            },
+                            getCharacterData: (characterName) => {
+                                setState('api.saving', true);
+                                try {
+                                    const playerName = getState('player_name', '')
+                                    const characterData = getCharacterData(playerName, characterName)
+                                    setState('characterData', getSheetData(characterName));
+                                } catch (error) {
+                                    setState('api.error', error.message);
+                                    setState('api.saving', false);
+                                } finally {
+                                    setState('api.saving', false);
+                                }
+                            },
+                            postCharacterData: (characterName, characterData) => {
+                                setState('api.saving', true);
+                                try {
+                                    const playerName = getState('player_name', '')
+                                    saveCharacterData(playerName, characterName, characterData)
+                                } catch (error) {
+                                    setState('api.error', error.message);
+                                    setState('api.saving', false);
+                                } finally {
+                                    setState('api.saving', false);
+                                }
+                                    
+                            }
+                            // loadCharacter: async (characterId) => {
+                            //     setState('api.loading', true);
+                            //     try {
+                            //         const character = await fetch(`/api/character/${characterId}`);
+                            //         setState('characters.current', character);
+                            //     } catch (error) {
+                            //         setState('api.error', error.message);
+                            //     } finally {
+                            //         setState('api.loading', false);
+                            //     }
+                            // },
+                            
+                            // refreshData: () => {
+                            //     // Refresh all data sources
+                            //     loadInitialData();
+                            // }
+                        }
+                    }
+
+                    function getCharacterNames(playerName) {
+                        let storageKey = config.key_prefix + '__' + playerName + '__' + config.key_characterNames;
+                        let characterNames = localStorage.getItem(storageKey)
+                        return characterNames
+                            ? JSON.parse(characterNames).sort()
+                            : []
+                    }
+
+                    function saveCharacterName(playerName, characterName) {
+                        let storageKey = config.key_prefix + '__' + playerName + '__' + config.key_characterNames;
+                        let characterNames = localStorage.getItem(storageKey)
+                        let namesArray = characterNames
+                            ? JSON.parse(characterNames)
+                            : []
+                        if (!namesArray.includes(characterName)) {
+                            namesArray.push(characterName)
+                            
+                            namesArray.sort()
+                            localStorage.setItem(storageKey, JSON.stringify(namesArray) )
+                        }
+                        return namesArray
+                    }
+
+                    function loadCharacterData(playerName, characterName) {
+                        let storageKey = config.key_prefix + '__' + playerName + '__' + config.key_characterData + '__' + characterName;
+                    }
+                    function saveCharacterData(playerName, characterName, characterData) {
+                        
+                    }
+                }
+
+                const AppHeaderComponent = (props, context) => ({
+                      
+                    render: () => {
+                        const { getState, setState } = context;
+
+                        return (
+                            {
+                                div: {
+                                    className: "app-header-component",
+                                    children: [
+                                        {
+                                            input: {
+                                                className: 'input-character-name',
+                                                type: 'text',
+                                                onchange: (e) => {
+                                                    window.app.addCharacterName(e.target.value)
+                                                }
+                                            }
+                                        },
+                                         {
+                                            select: {
+                                                className: 'character_select',
+                                                id: 'character-select',
+                                                onchange: (e) => {
+                                                    setState('currentCharacterName', e.target.value)
+                                                },
+                                                children: () => {
+                                                    let names = getState('characterNames')
+                                                    if (names && names.length > 0) {
+                                                        return names.map(
+                                                            (item) => ({
+                                                                option: {
+                                                                    value: item,
+                                                                    text: item
+                                                                }
+                                                            })
+                                                        )
+                                                    } else  {
+                                                        return []
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        )
+                    }
+                })
+                const CharacterSheetComponent = (props, context) => {
+                        const { getState, setState } = context;
+
+                        return {
+                         render: () => ({
+                            div: {
+                                    className: "character-sheet-component",
+                                    children: [
+                                        {
+                                            div: {
+                                                className: 'character-sheet-item',
+                                                text: 'Character Sheet Component Value',
+                                                children: [
+                                                    {
+                                                        div: {
+                                                            className: 'page1',
+                                                            children: [
+                                                                {
+                                                                    div: {
+                                                                        className: 'backgound'
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        div: {
+                                                            className: 'page2',
+                                                            children: [
+                                                                {
+                                                                    div: {
+                                                                        className: 'page-2-content'
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            })
+                        }
+                    }
+                
+
+                const CharactersApp = (props, context) => {
+                    const { getState, setState } = context;
+                    
+                    return {
+                         render: () => ({
+                            div: {
+                                className: "characters-app",
+                                children: [
+                                    { AppHeaderComponent: {} },
+                                    {
+                                        div: {
+                                            className: "character-container",
+                                            children: [
+                                                { CharacterSheetComponent: {} }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        div: {
+                                            className: "app-footer",
+                                            children: []
+                                        },
+                                    }
+                                ]
+                            }
+                        })
+                    }
+                }
+
+                const juris = new Juris({
+
+                    components: {
+                        CharactersApp,
+                        AppHeaderComponent,
+                        CharacterSheetComponent,
+                        
+                    },
+
+                    
+                    headlessComponents: {
+                        StatePersistenceManager: {
+                            fn: StatePersistenceManager,
+                            options: { autoInit: true }
+                        }
+                    },
+                    
+                    layout: {
+                        div: {
+                            children: [{ CharactersApp: {} }]
+                        }
+                    },
+                    
+                    states: {
+                        characterNames: [],
+                        player_name: '',
+                        character_name: '',
+                        character_data: {}
+
+                        api: {
+                            loading: false,
+                            saving: false,
+                            error: ''
+                        }
+                    }
+                });
+
+                // Render the app
+                juris.render('#app');
+
+                // Global access for debugging
+                window.juris = juris;
+                window.app = {
+                    refreshCharacterNames: () => juris.headlessAPIs.StatePersistenceManager.loadCharacterNames(),
+                    addCharacterName: (characterName) => juris.headlessAPIs.StatePersistenceManager.addCharacterName(characterName)
+                }
+
+            </script>
+       
+    </body>
+</html>

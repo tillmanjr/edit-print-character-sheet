@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            tbody {
+                overflow-y: scroll;
+                overflow-x: hidden;
+                width: 412px;
+                padding-top:4px;
+            }
+            .tableParent {
+                max-width: 700px;
+            }
+            th:first-child{
+                width: 120px;
+            }
+            th:nth-child(2) {
+                width: 50px;
+                text-align: right;
+                padding-left: 8px;
+
+            }
+            th:nth-child(3) {
+                width: 250px;
+                text-align: left;
+                padding-left: 20px;
+            }
+            
+            th:nth-child(4) {
+                width: 20px;
+            }
+            tbody>tr>td:nth-child(3) {
+                vertical-align: top;
+                width: 250px;
+                padding-left: 20px;
+            }
+            tbody>tr>td:nth-child(2) {
+                vertical-align: top;
+                width: 50px;
+                text-align: left;
+                padding-left: 8px;
+            }
+            tbody>tr>td:first-child {
+                vertical-align: top;
+                width: 120px;
+                text-align: right;
+               padding: 1px;
+            }
+
+            .highlight {
+                background-color: bisque;
+            }
+
+            /* .tableParent table {
+        border-collapse: separate;
+        border: solid #b3b3b3 1px;
+        border-radius: 6px;
+        border-spacing: 0px;
+    } */
+    .tableParent>table thead {
+        border-collapse: separate;
+        border-top: solid #b3b3b3 1px;
+        border-right: solid #b3b3b3 1px;
+        border-left: solid #b3b3b3 1px;
+        border-bottom:  solid #b3b3b3 1px;
+        border-spacing: 0px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        width: 412px;
+    }
+    .tableParent>table tbody {
+        border-collapse: separate;
+        border: solid #b3b3b3 1px;
+        border-top: 0;
+        border-spacing: 0px;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+    }
+
+    .tableParent table > tbody > tr > td {
+    	border-bottom: 1px solid #ccccccbb;
+    }
+    .tableParent table > tbody > tr:last-child > td {
+    	border-bottom: thin #ccccccbb;
+    }
+    .tableParent table th:first-of-type{
+    	border-top-left-radius: 6px;
+    }
+    .tableParent table th:last-of-type{
+    	border-top-right-radius: 6px;
+    }
+    .tableParent table tr:last-child td:first-child {
+        border-bottom-left-radius: 5px;
+    }
+    .tableParent table tr:last-child td:last-child {
+        border-bottom-right-radius: 5px;
+    }
+
+    #addExpBtn {
+        margin-top: 20px;
+    }
+
+    .rowEditContainer {
+        height: 190px;
+        width:  190px;
+        background-color: rgb(152, 162, 210);
+        border: 2px solid blue;
+        border-radius: 6px;
+        position: fixed;
+        
+        display: flex;
+        flex-direction: column;
+        align-items: space-around;
+        row-gap: 10px;
+    }
+    dialog {
+        left: -1200px;
+        top: 100px;
+    }
+    dialog:open {
+        left: 0px;
+        top: 0px
+    }
+    .expItem {
+        padding-left: 8px;
+    }
+    .expItem>input {
+        background-color: rgb(126, 134, 170);
+        border-radius: 6px;
+         border: 2px solid black;
+    }
+    .expItem>input:focus {
+        background-color:rgb(199, 199, 203);
+        outline-style: none;
+        outline-color: transparent;
+    }
+    .headerItem {
+        flex: none;
+        height: 18px;
+        padding-top: 4px;
+        padding-bottom: 1px;
+        text-align: center;
+
+    }
+    .dateItem {
+        flex: none;
+        height: 20px;
+        padding-bottom: 1px;
+    }
+    .experienceItem {
+        flex: none;
+        height: 20px;
+        padding-bottom: 1px;
+    }
+    .descriptionItem {
+        flex: none;
+        height: 20px;
+        padding-bottom: 1px;
+        margin-top: 12px;
+    }
+    .buttonItem {
+        flex: none;
+        height: 20px;
+        padding: 4px;
+        margin-top: 16px;padding-left: 70px;
+    }
+    .buttonItem>button {
+        background-color: rgb(126, 134, 170);
+
+    }
+    .buttonItem>button:focus {
+        outline-style: solid;
+        outline-color: black;
+        background-color:rgb(199, 199, 203);
+    }
+    .buttonItem>button:hover {
+        outline-style: solid;
+        outline-color: black;
+        background-color:rgb(199, 199, 203);
+    }
+    #editExperienceDialog::backdrop {
+        background-image:  linear-gradient(
+      to right,
+      rgba(0, 138,255,0.5 ),
+      rgba(113, 46, 229, 0.5)
+    );
+    }
+
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div class="tableParent table_height">
+            <table class="scrollable scrollableTable">
+                <thead>
+                    <th id="first-col">Date</th>
+                    <th id="second-col">Experience</th>
+                    <th id="third-col">Description</th>
+                    <th id="hidden-col"></th>
+                    </tr>
+                </thead>
+                <tbody id="mytbody">
+               
+                </tbody>
+            </table>
+            
+        </div>
+       
+            <dialog class="rowEditContainer" id="editExperienceDialog"  closedby="any">
+                <div class="headerItem expItem">Enter Experience</div>
+                <div class="dateItem expItem">
+                    <label for="">Date</label>
+                    <input type="date" id="inputExpDate" autofocus />
+                </div>
+                <div class="experienceItem expItem">
+                    <label for="">Experience</label>
+                    <input type="number" id="inputExperience" />
+                    </div>
+                <div class="descriptionItem expItem">  
+                    <label for="">Description</label>
+                    <input type="text" id="inputExpDescription" />
+                </div>
+                <div class="buttonItem">
+                    <button id="btnExpCancel">Cancel</button>
+                    <button id="btnExpSave" disabled>Save</button>
+                </div>
+            </dialog>
+             <script>
+                function checkExpInputs() {
+                    const shouldEnable = (document.getElementById("inputExpDate").value) && (document.getElementById("inputExperience").value.length > 0)
+                    document.getElementById("btnExpSave").disabled = !shouldEnable
+                }
+                document.getElementById("inputExpDate").addEventListener("change", checkExpInputs)
+                document.getElementById("inputExperience").addEventListener("input", checkExpInputs)
+                document.getElementById("btnExpCancel").addEventListener("click", (e) => document.getElementById("editExperienceDialog").close())
+            </script>
+        <div>
+            <button id="addExpBtn">Add 1</button>
+        </div>
+        
+        <script src="" async defer></script>
+        <script>
+            const createExperienceEntry = (
+        entryDate,
+        description,
+        amount
+     ) => {
+        const id = crypto.randomUUID();
+        return {
+            id : id,
+            entryDate: entryDate || new Date(),
+            description: description || 'no description',
+            amount: amount || 0
+        }
+
+}
+
+class ExperienceRoster {
+    #recalcNeeded = false
+    constructor() {
+        this.totalExperience = 0;
+        this.history = []
+    }
+    get Experience () { 
+        if (this.#recalcNeeded) {
+            this.recalc()
+        }
+        return this.totalExperience
+    }
+
+    get History () {
+        if (this.#recalcNeeded) {
+            this.recalc()
+        }
+        return this.history.map( (item) => ({...item}))
+    }
+    recalc() {
+        if (this.history.length < 1) {
+            this.#recalcNeeded = false
+            this.totalExperience = 0
+            return this.totalExperience
+        }
+        this.history.sort((a,b) => (a.entryDate - b.entryDate))
+        this.totalExperience = this.history.reduce( (previous, current) => {
+            if (current.hasOwnProperty('amount')) {
+                if (typeof current.amount === 'number') {
+                    return previous + current.amount
+                }
+            }
+            return previous
+        }, 0)
+        this.#recalcNeeded = false
+    }
+    addExperience (
+        entryDate,
+        description,
+        amount
+     ) {
+        const entry = createExperienceEntry(
+                entryDate,
+                description,
+                amount
+        )
+        this.#addEntry(entry)
+        return entry
+     }
+     #addEntry (entry) {
+         this.history.push(entry)
+         this.#recalcNeeded = true
+     }
+}
+        </script>
+        <script>
+            let expRoster
+            function handleAddOneClick(e) {
+                const dialog = document.getElementById("editExperienceDialog")
+                dialog.showModal()
+                const newItem = expRoster.addExperience(new Date('2020-12-01'), 'Twas on the good ship, Venus. By god, you should have seen us.', 6000)
+                const newItemId = newItem.id
+                const experienceDetails = expRoster.History
+                const bodyElement = document.getElementById('mytbody')
+                bodyElement.innerHTML = ''
+                let newRowIndex = -1
+                for (let index = 0; index < experienceDetails.length; index++) {
+                    const detail = experienceDetails[index]
+                    addOneExpRow(bodyElement, detail, index)
+                    if (detail.id === newItemId) {
+                        newRowIndex = index
+                    }
+                }
+                const newRow = Array.from(bodyElement.children)[newRowIndex]
+                if (newRow) {
+                    newRow.scrollIntoView()
+                    newRow.classList.add('highlight')
+                }
+            }
+            function addOneExpRow(bodyElement, detail,index) {
+                const tr = document.createElement('tr')
+
+                    const td1 = document.createElement('td')
+                    td1.id = `row-${index}`
+                    td1.headers='first-col'
+                    td1.textContent=detail.entryDate.toLocaleDateString()
+
+                    const td2 = document.createElement('td')
+                    td2.headers='second-col'
+                    td2.textContent=detail.amount
+
+                    const td3 = document.createElement('td')
+                    td3.headers='third-col'
+                    td3.textContent=detail.description
+                    
+                    
+
+                    const td4 = document.createElement('td')
+                    td4.headers='hidden-col'
+
+                    const idElement = document.createElement('input')
+                    idElement.type="hidden"
+                    idElement.value=detail.id
+
+                    td4.appendChild(idElement)
+
+                    tr.appendChild(td1)
+                    tr.appendChild(td2)
+                    tr.appendChild(td3)
+                    tr.appendChild(td4)
+
+                    bodyElement.appendChild(tr)
+            }
+            window.addEventListener('load', function () {
+                // Make the first table with the scrollable class (if there is one) scrollable.
+                expRoster = new ExperienceRoster()
+                expRoster.addExperience(new Date(), 'Goblins', 300)
+                expRoster.addExperience(new Date(), 'Kobolds', 150)
+                expRoster.addExperience(new Date(), 'Orcs', 500)
+                expRoster.addExperience(new Date(), 'Fuzzballs', 600)
+
+                expRoster.addExperience(new Date(), 'Goblins #2', 300)
+                expRoster.addExperience(new Date(), 'Kobolds #2', 150)
+                expRoster.addExperience(new Date(), 'Orcs #2', 500)
+                expRoster.addExperience(new Date(), 'Fuzzballs #2', 600)
+
+                 expRoster.addExperience(new Date(), 'Goblins #3', 300)
+                expRoster.addExperience(new Date(), 'Kobolds #3', 150)
+                expRoster.addExperience(new Date(), 'Orcs #3', 500)
+                expRoster.addExperience(new Date(), 'Fuzzballs #3', 600)
+
+                 expRoster.addExperience(new Date(), 'Goblins #4', 300)
+                expRoster.addExperience(new Date(), 'Kobolds #4', 150)
+                expRoster.addExperience(new Date(), 'Orcs #4', 500)
+                expRoster.addExperience(new Date(), 'Fuzzballs #4', 600)
+
+                const experienceDetails = expRoster.History
+                const bodyElement = document.getElementById('mytbody')
+                for (let index = 0; index < experienceDetails.length; index++) {
+                    const detail = experienceDetails[index]
+                    addOneExpRow(bodyElement, detail, index)
+                    
+                }
+
+                const addExpBtn = document.getElementById('addExpBtn')
+                addExpBtn.addEventListener('click', handleAddOneClick)
+
+
+                const tables = document.getElementsByClassName('scrollable');
+                if (tables.length > 0)
+                {
+                    const the_table = new ScrollableTable({
+                        table: tables[0],
+                        height: 300,
+                        use_heading: true
+                    });
+                    const adjust_table = the_table.get_adjustment_callback();
+
+                    // Re-process the table’s size when the viewport is resized.
+                    window.addEventListener('resize', adjust_table);
+
+                    // Re-process the table’s size when details elements open/close.
+                    const details = document.getElementsByTagName('details');
+                    if (details)
+                    {
+                    for (let i = 0; i < details.length; i++)
+                    {
+                        details[i].addEventListener('toggle', adjust_table);
+                    }
+                    }
+                }
+            })
+
+        </script>
+                <script>
+            /*  scrollable_tables.js
+ *  Support for making table bodies scrollable with headers remaining stationary and header/body
+ *  column widths remaining matched.
+ */
+
+const DEBUG_HEIGHT = true;
+const DEBUG_WIDTHS = true;
+
+//  content_width()
+//  ---------------------------------------------------------------------------------------------
+/*  Returns the content width of a table cell. Assuming border-collapse model, this means the
+ *  computed width minus the sum of its left and right padding and the width of the wider of its
+ *  left and right border.
+ */
+const content_width = cell =>
+{
+  let cell_style = getComputedStyle(cell);
+  let pl = Number.parseFloat(cell_style.getPropertyValue('padding-left'), 10);
+  let pr = Number.parseFloat(cell_style.getPropertyValue('padding-right'), 10);
+  let bl = Number.parseFloat(cell_style.getPropertyValue('border-left-width'), 10);
+  let br = Number.parseFloat(cell_style.getPropertyValue('border-right-width'), 10);
+  let adj = pl + pr + Math.max(bl, br);
+  return cell.getBoundingClientRect().width - adj;
+};
+
+
+
+// class ScrollableTable
+// ================================================================================================
+/* The first tbody element of a ScrollableTable will be scrollable, within the limits of the
+ * desired_height, which can be changed via the adjust_height method.
+ */
+class ScrollableTable
+{
+  //  constructor()
+  //  ---------------------------------------------------------------------------------------------
+  /*  Makes a table body scrollable while column headers stay in position.
+   *  The height of the table can be given explicitly or can be determined from the space remaining
+   *  in the viewport.
+   */
+  constructor(args)
+  {
+    // Context
+    // ............................................................................................
+    if (DEBUG_HEIGHT || DEBUG_WIDTHS)
+    {
+      console.log(args);
+    }
+    this.table = args.table;
+    this.desired_height = args.height;
+    this.initial_delay = args.delay ? args.delay : 2000;
+    this.padding_bottom = args.padding ? args.padding : 2;
+    this.use_heading_widths = args.use_heading;
+    this.thead = this.table.getElementsByTagName('thead')[0];
+    let head_height = this.thead.offsetHeight;
+    this.tbody = this.table.getElementsByTagName('tbody')[0];
+    let body_height = this.tbody.offsetHeight;
+    this.intrinsic_height = head_height + body_height;
+    this.parent_node = this.table.parentNode; //  Used to control height of table.
+
+    // Attributes that make a table body scrollable
+    // ............................................................................................
+    this.thead.style.display = 'block';
+    this.tbody.style.display = 'block';
+    this.tbody.style.position = 'absolute';
+
+    // initial adjustments
+    this.adjust_widths(false);
+    this.adjust_height();
+    setTimeout(function ()
+    {
+      // Cleanup Heuristic.
+      // Wait for table layout to complete, and then readjust the table again.
+      // If the table is too long for layout to complete layout within the default delay interval,
+      // the code that creates this object should specify a longer initial_delay.
+      this.adjust_table(this.use_heading_widths);
+    }.bind(this), this.initial_delay);
+  }
+
+
+  // adjust_table()
+  // ----------------------------------------------------------------------------------------------
+  /* Adjust the table’s height and width.
+   */
+  adjust_table()
+  {
+    this.adjust_widths(this.use_heading_widths);
+    this.adjust_height();
+  }
+
+  // get_adjustment_callback()
+  // ----------------------------------------------------------------------------------------------
+  /* Provide a reference to this object’s adjust_table method, bound to ‘this’. I don’t understand
+   * why the object returned by the constructor doesn’t take care of this, but I think it’s because
+   * ES6 classes are just syntactic sugar for nested functions, so the closure has to be handled
+   * explicitly.
+   *
+   * Used for setting up event listeners when window is resized or details elements toggle state.
+   */
+  get_adjustment_callback()
+  {
+    return this.adjust_table.bind(this);
+  }
+
+
+  //  adjust_height()
+  //  ---------------------------------------------------------------------------------------------
+  /*  Change the height of a ScrollableTable's parent div: initially, or because of an event that
+   *  makes it necessary to do so.
+   */
+  adjust_height()
+  {
+
+    const viewport_height = window.innerHeight;
+    const table_top = this.parent_node.offsetTop;
+    const available_height = viewport_height - table_top;
+
+    if (DEBUG_HEIGHT)
+    {
+      console.log(`viewport height: ${window.innerHeight}
+table top: ${this.parent_node.offsetTop}
+available height: ${available_height}
+intrinsic height: ${this.intrinsic_height}
+desired height: ${this.desired_height}
+padding bottom: ${this.padding_bottom}`);
+    }
+
+    let head_height = this.thead.offsetHeight;
+    let body_height = Math.min(available_height - head_height, this.intrinsic_height - head_height);
+    if (this.desired_height)
+    {
+      // The height is a known value
+      body_height = Math.min(available_height, this.desired_height - head_height);
+    }
+
+    if (DEBUG_HEIGHT)
+    {
+      console.log(`available height: ${available_height},
+head height: ${head_height}
+body height: ${body_height}
+padding: ${this.padding_bottom}`);
+    }
+    this.tbody.style.height = (body_height + this.padding_bottom) + 'px';
+    let parent_height = head_height + body_height;
+    this.parent_node.style.height = (parent_height + this.padding_bottom) + 'px';
+    if (parent_height > available_height)
+    {
+      this.parent_node.style.overflowY = 'scroll';
+    }
+    else
+    {
+      this.parent_node.style.overflowY = 'hidden';
+    }
+    let height_limit = this.desired_height > 0
+        ? Math.min(available_height, this.desired_height)
+        : available_height  
+    if ((this.thead.offsetHeight + this.tbody.offsetHeight) < height_limit)
+    {
+      // Eliminate empty scrollbar area ...
+      this.tbody.style.overflowY = 'hidden';
+    }
+    else
+    {
+      // ... but be sure it’s there if needed.
+      this.tbody.style.overflowY = 'scroll';
+    }
+    if (DEBUG_HEIGHT)
+    {
+      console.log(`viewport height: ${viewport_height}
+table top: ${table_top}
+available height: ${available_height}
+intrinsic height: ${this.intrinsic_height}
+head height: ${this.thead.offsetHeight}
+body height: ${this.tbody.offsetHeight}
+overflowY: ${this.tbody.style.overflowY}
+-------------------------`);
+    }
+  }
+
+
+  // adjust_widths()
+  // ----------------------------------------------------------------------------------------------
+  /* Adjust cell widths so that tbody cells line up with thead cells. If the table uses the
+   * headers attribute to reference row and column positions, this is easy, provided the column
+   * ids end with '-col'. Uses an alternative heuristic if that requirement does not obtain. */
+  adjust_widths(use_heading_widths)
+  {
+    const viewport_width = window.innerWidth;
+    // Test if all cells in the first row of the body have proper headers attributes, including
+    // at least one that ends with '-col'.
+    // “Feature Request”: handle multiple -col headers (cases where multiple body cells match a
+    // header cell with a rowspan > 1).
+    let first_body_row_cells = this.tbody.children[0].children;
+    let has_headers = true;
+    let head_cells = [];
+    let body_cells = [];
+    for (let col = 0; col < first_body_row_cells.length; col++)
+    {
+      let body_cell = first_body_row_cells[col];
+      if (body_cell.hasAttribute('headers'))
+      {
+        let headers_str = body_cell.getAttribute('headers');
+        let col_id = null;
+        let headers = headers_str.split(' ');
+        for (let i = 0; i < headers.length; i++)
+        {
+          if (headers[i].match(/-col$/))
+          {
+            col_id = headers[i];
+            break;
+          }
+        }
+        if (col_id === null)
+        {
+          has_headers = false;
+          break;
+        }
+        let head_cell = document.getElementById(col_id);
+        //  Save layout information for pairs of head/body cells in a column
+        body_cells[col] = {cell: first_body_row_cells[col], width: content_width(body_cell)};
+        head_cells[col] = {cell: head_cell, width: content_width(head_cell)};
+      }
+      else
+      {
+        has_headers = false;
+        break;
+      }
+    }
+    this.parent_node.overflowX = 'hidden';
+    if (DEBUG_WIDTHS)
+    {
+      console.log(`use heading widths: ${use_heading_widths}
+has headers: ${has_headers}
+viewport width: ${viewport_width}
+header_width: ${this.thead.offsetWidth}
+body_width: ${this.tbody.offsetWidth}
+`);
+    }
+    if (has_headers)
+    {
+      // Make the narrower of the header cell or body cell match the width of the wider of the two.
+      for (let col = 0; col < head_cells.length; col++)
+      {
+        if (use_heading_widths ||
+            (head_cells[col].cell.offsetWidth > body_cells[col].cell.offsetWidth))
+        {
+          body_cells[col].cell.style.minWidth = head_cells[col].width + 'px';
+        }
+        else
+        {
+          head_cells[col].cell.style.minWidth = body_cells[col].width + 'px';
+        }
+      }
+    }
+    else
+    {
+      // Alternate heuristic: find the row in thead with the largest number of cells, assume that
+      // is the number of columns. If that matches the number of cells in the first row of the body,
+      // do the width adjustment. If this fails, the table will be scrollable, but the columns
+      // will not line up.
+      let max_thead_cols_row_index = 0;
+      let max_thead_cols_num_cols = 0;
+      for (let row = 0; row < this.thead.children.length; row++)
+      {
+        let this_row = this.thead.children[row];
+        if (this_row.children.length > max_thead_cols_num_cols)
+        {
+          max_thead_cols_row_index = row;
+          max_thead_cols_num_cols = this_row.children.length;
+        }
+      }
+      let head_cells = this.thead.children[max_thead_cols_row_index].children;
+      let body_cells = this.tbody.children[0].children;
+      if (head_cells.length === body_cells.length)
+      {
+        // Set the width of each cell in the row of thead with max cols to match the width of the
+        // corresponding cols in the first row of tbody.
+        for (let col = 0; col < head_cells.length; col++)
+        {
+          let head_cell = head_cells[col];
+          let body_cell = body_cells[col];
+          let head_cell_width = content_width(head_cell);
+          let body_cell_width = content_width(body_cell);
+          if (use_heading_widths ||
+              (head_cell_width > body_cell_width))
+          {
+            body_cell.style.minWidth = head_cell_width + 'px';
+          }
+          else
+          {
+            head_cell.style.minWidth = body_cell_width + 'px';
+          }
+        }
+      }
+      else
+      {
+        console.error(`Unable to adjust widths: ${head_cells.length} !== ${body_cells.length}`);
+      }
+      if (DEBUG_WIDTHS)
+      {
+
+        console.log(`use heading widths: ${use_heading_widths}
+has headers: ${has_headers}
+viewport width: ${viewport_width}
+header_width: ${this.thead.offsetWidth}
+body_width: ${this.tbody.offsetWidth}
+---------------------------------------
+`);
+      }
+    }
+  }
+}
+        </script>
+    </body>
+</html>

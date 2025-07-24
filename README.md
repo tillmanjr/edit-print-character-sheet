@@ -1,4 +1,4 @@
-# Character Sheet:  Edit in place, Print to 8"x5" card, Save and Restore locally  
+# Character Sheet v2:  Edit in place, Print to 8"x5" card, Save and Restore locally  
 
 ### Current version is 1.1.1 (release build pending)
 
